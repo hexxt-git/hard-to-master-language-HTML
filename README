@@ -2,13 +2,20 @@ psh  int -> pushes a number to the top of the stack
 pop      -> removes the top number from the stack
 add      -> adds up   the top two numbers of the stack
 sub      -> subtracts the top two numbers of the stack
-ife  int -> if the top isnt =int skips the next inst
-ifg  int -> if the top isnt >int skips the next inst
-jmp  lbl -> jumps the program to a label
+mul      -> multiplies the top two numbers of the stack
+div      -> divides the top two numbers of the stack (returns divistion and modulo)
+ife      -> only does the next instruction if the top two elements are equal
+ifn      -> only does the next instruction if the top two elements are not equal
+ifg      -> only does the next instruction if the top element is greater than the second
+ifl      -> only does the next instruction if the top element is less than the second
+jmp  int -> jumps the program to a line
+jml  lbl -> jumps the program to a label
 lbl:     -> ends the previous label and begins a new one
 hlt      -> halts the label
 red      -> reads and int input
-wri  msg -> writes a message
-prt      -> writes the top of the stack
+prt      -> writes the top int of the stack to termainal
+wrt      -> writes the top int of the stack as character to termainal
+log  msg -> writes a message to termainal
+pss      -> does nothing
 html programs start at main function and stop if they run-
 out of instructions or reach a halt at main leve
