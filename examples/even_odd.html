@@ -1,0 +1,20 @@
+# you could just use division by 2 and check the remainder
+main:
+    log enter a number: 
+    red
+    jml loop
+    hlt
+
+loop:
+    psh 0
+    ife 2
+        log even \n
+        hlt
+    ifg 2
+        log odd \n
+        hlt
+    pop
+    psh 2
+    sub
+    jml loop
+    hlt

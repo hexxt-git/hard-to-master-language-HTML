@@ -1,15 +1,16 @@
 ## instruction set
 psh  int -> pushes a number to the top of the stack
 pop      -> removes the top number from the stack
-add      -> adds up   the top two numbers of the stack
-sub      -> subtracts the top two numbers of the stack
+add      -> adds up the top two numbers of the stack
+sub      -> subtracts the second from the top most elements in the stack
 mul      -> multiplies the top two numbers of the stack
-div      -> divides the top two numbers of the stack (returns divistion and modulo)
-ife      -> only does the next instruction if the top two elements are equal
-ifn      -> only does the next instruction if the top two elements are not equal
-ifg      -> only does the next instruction if the top element is greater than the second
-ifl      -> only does the next instruction if the top element is less than the second
+div      -> divides the top two numbers of the stack returns integer divistion and remainder (division on top)
+ife  int -> skips the next [arg] instruction if the top two elements are not equal
+ifn  int -> skips the next [arg] instruction if the top two elements are equal
+ifg  int -> skips the next [arg] instruction if the second top element is not greater than the top one
+ifg  int -> skips the next [arg] instruction if the second top element is not lesser  than the top one
 jmp  int -> jumps the program to a line
+jmb  int -> jumps the program by n lines
 jml  lbl -> jumps the program to a label
 lbl:     -> ends the previous label and begins a new one
 hlt      -> halts the label
@@ -28,6 +29,8 @@ when a label is called the program will jump to the label and continue from ther
 you must hlt out of a label otherwise the program will continue to the next label.
 
 when you hlt out of a label the program will continue where it left off before jml was called.
+
+arithmetic operations dont pop the top two elements and push the result to the stack
 
 ## the stack
 the stack is a list of integers that the program can push and pop from.

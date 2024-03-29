@@ -5,7 +5,6 @@
 #define MAXLINELEN 1024
 #define STACKSIZE 1024
 #define MAXJUMPDEPTH 1024
-#define VERBOSE 0
 #define true 1
 #define false 0
 
@@ -20,8 +19,15 @@ struct Label{
 };
 
 int main(int argc, char** argv){
-    if(argc != 2) {
-        printf("please enter exactly one .html file name as argument\n");
+    int VERBOSE = 0;
+    if(argc == 3){
+        if(strcmp(argv[2], "-v") == 0){
+            VERBOSE = 1;
+        }
+    }
+
+    if(argc < 2) {
+        printf("please enter exactly one .html file name as argument\n other options include -v for verbose mode\n");
         return 1;
     }
 
@@ -171,7 +177,7 @@ int main(int argc, char** argv){
     while(jump_history_index >= 0 && inst_ptr < program_size){
         
         if(VERBOSE == 1){
-            printf("safely arrived at instruction %d %s %s\n", inst_ptr, instruction_arr[inst_ptr].instruction, instruction_arr[inst_ptr].argument_str);
+            printf("\n== safely arrived at line %d %s %s ==\n", inst_ptr, instruction_arr[inst_ptr].instruction, instruction_arr[inst_ptr].argument_str);
         }
 
         if(strcmp(instruction_arr[inst_ptr].instruction, "psh") == 0){
@@ -181,69 +187,53 @@ int main(int argc, char** argv){
             stack_ptr--;
         } else if (strcmp(instruction_arr[inst_ptr].instruction, "add") == 0){
             int a = stack[stack_ptr];
-            stack_ptr--;
             int b = stack[stack_ptr];
-            stack_ptr--;
 
             stack_ptr++;
             stack[stack_ptr] = a + b;
         } else if (strcmp(instruction_arr[inst_ptr].instruction, "sub") == 0){
             int a = stack[stack_ptr];
-            stack_ptr--;
             int b = stack[stack_ptr];
-            stack_ptr--;
 
             stack_ptr++;
-            stack[stack_ptr] = a - b;
+            stack[stack_ptr] = b - a;
         } else if (strcmp(instruction_arr[inst_ptr].instruction, "mul") == 0){
             int a = stack[stack_ptr];
-            stack_ptr--;
             int b = stack[stack_ptr];
-            stack_ptr--;
 
             stack_ptr++;
             stack[stack_ptr] = a * b;
         } else if (strcmp(instruction_arr[inst_ptr].instruction, "div") == 0){
             int a = stack[stack_ptr];
-            stack_ptr--;
             int b = stack[stack_ptr];
-            stack_ptr--;
 
             stack_ptr++;
-            stack[stack_ptr] = a % b;
+            stack[stack_ptr] = b % a;
             stack_ptr++;
-            stack[stack_ptr] = a / b;
+            stack[stack_ptr] = b / a;
         } else if (strcmp(instruction_arr[inst_ptr].instruction, "ife") == 0){
             int a = stack[stack_ptr];
-            stack_ptr--;
-            int b = stack[stack_ptr];
-            stack_ptr--;
-            if(a == b){
-                inst_ptr++;
+            int b = stack[stack_ptr-1];
+            if(a != b){
+                inst_ptr += instruction_arr[inst_ptr].argument_int;
             }
         } else if (strcmp(instruction_arr[inst_ptr].instruction, "ifn") == 0){
             int a = stack[stack_ptr];
-            stack_ptr--;
-            int b = stack[stack_ptr];
-            stack_ptr--;
-            if(a != b){
-                inst_ptr++;
+            int b = stack[stack_ptr-1];
+            if(a == b){
+                inst_ptr += instruction_arr[inst_ptr].argument_int;
             }
         } else if (strcmp(instruction_arr[inst_ptr].instruction, "ifg") == 0){
             int a = stack[stack_ptr];
-            stack_ptr--;
-            int b = stack[stack_ptr];
-            stack_ptr--;
-            if(a > b){
-                inst_ptr++;
+            int b = stack[stack_ptr-1];
+            if(b > a){
+                inst_ptr += instruction_arr[inst_ptr].argument_int;
             }
-        } else if (strcmp(instruction_arr[inst_ptr].instruction, "ifl") == 0){
+        }else if (strcmp(instruction_arr[inst_ptr].instruction, "ifl") == 0){
             int a = stack[stack_ptr];
-            stack_ptr--;
-            int b = stack[stack_ptr];
-            stack_ptr--;
-            if(a < b){
-                inst_ptr++;
+            int b = stack[stack_ptr-1];
+            if(b < a){
+                inst_ptr += instruction_arr[inst_ptr].argument_int;
             }
         } else if (strcmp(instruction_arr[inst_ptr].instruction, "red") == 0){
             int input;
@@ -258,6 +248,8 @@ int main(int argc, char** argv){
             printf("%s", instruction_arr[inst_ptr].argument_str);
         } else if (strcmp(instruction_arr[inst_ptr].instruction, "jmp") == 0){
             inst_ptr = instruction_arr[inst_ptr].argument_int;
+        } else if (strcmp(instruction_arr[inst_ptr].instruction, "jmb") == 0){
+            inst_ptr += instruction_arr[inst_ptr].argument_int;
         } else if (strcmp(instruction_arr[inst_ptr].instruction, "jml") == 0){
             for(int j = 0 ; j < label_arr_index ; j++){
                 if(strcmp(label_arr[j].label, instruction_arr[inst_ptr].argument_str) == 0){

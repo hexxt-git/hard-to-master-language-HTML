@@ -1,0 +1,16 @@
+# fibonacci sequence
+main:
+    psh 0
+    psh 1
+    jml fib
+    hlt
+    
+fib:
+    prt
+    log \n
+    add
+    psh 1000000000
+    ifl 1
+        hlt
+    pop
+    jml fib
